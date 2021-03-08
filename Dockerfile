@@ -1,5 +1,7 @@
 FROM rust:alpine as builder
 
+RUN apk add --no-cache musl-dev
+
 RUN USER=root cargo new --bin rustapp
 WORKDIR ./rustapp
 COPY ./Cargo.toml ./Cargo.toml
@@ -15,7 +17,6 @@ RUN cargo build --release
 FROM alpine
 ARG APP=/usr/src/app
 
-RUN apk add --no-cache
 
 EXPOSE 8080
 
