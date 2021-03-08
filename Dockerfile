@@ -20,8 +20,8 @@ ARG APP=/usr/src/app
 
 EXPOSE 8080
 
-RUN groupadd $APP_USER \
-    && useradd -g $APP_USER $APP_USER \
+RUN addgroup -S $APP_USER \
+    && uadduser -S $APP_USER -G $APP_USER \
     && mkdir -p ${APP}
 
 COPY --from=builder /moebot/target/release/moebot ${APP}/moebot
