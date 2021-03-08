@@ -23,3 +23,6 @@ EXPOSE 8080
 COPY --from=builder /moebot/target/release/moebot ${APP}/moebot
 
 WORKDIR ${APP}
+
+
+CMD ["./moebot"]
