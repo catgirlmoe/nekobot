@@ -68,8 +68,8 @@ impl EventHandler for Handler {
                     format!("<@{}>, has left the server!", user.id)
                 );
                 e.footer(|footer| {
-                    footer.text(format!("{}#{}", member.user.name, member.user.discriminator));
-                    footer.icon_url(member.user.avatar_url().expect("fuck icons"));
+                    footer.text(format!("{}#{}", user.name, user.discriminator));
+                    footer.icon_url(user.avatar_url().expect("fuck icons"));
                     footer
                 });
                 e
