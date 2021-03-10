@@ -45,15 +45,16 @@ impl EventHandler for Handler {
     async fn guild_member_addition(&self, ctx: Context, _guild_id: GuildId, member: Member) {
         ChannelId(808467694100938772).send_message(&ctx.http, |m| {
             m.embed(|e| {
-                e.colour(Colour::from_rgb(233, 30, 99));
-                e.description(    
-                    format!("Welcome, <@{}>, to the server!", member.user.id)
-                );
-                e.footer(|footer| {
-                    footer.text(format!("{}#{}", member.user.name, member.user.discriminator));
-                    footer.icon_url(member.user.avatar_url().expect("fuck icons"));
-                    footer
+                e.author(|ea| {
+                    ea.icon_url(member.user.avatar_url().expect("fuck icons"));
+                    ea.name(format!("{}#{}", member.user.name, member.user.discriminator));
+                    ea.url("https://catgirl.moe/todo/profile/page");
+                    ea
                 });
+                e.colour(Colour::from_rgb(139, 195, 74));
+                e.description(    
+                    format!("Welcome <@{}> to the server!\nEnjoy your stay!", member.user.id)
+                );
                 e
             });
             m
@@ -63,15 +64,16 @@ impl EventHandler for Handler {
     async fn guild_member_removal(&self, ctx: Context, _guild_id: GuildId, user: User, _member: Option<Member>) {
         ChannelId(808467694100938772).send_message(&ctx.http, |m| {
             m.embed(|e| {
-                e.colour(Colour::from_rgb(233, 30, 99));
-                e.description(    
-                    format!("<@{}>, has left the server!", user.id)
-                );
-                e.footer(|footer| {
-                    footer.text(format!("{}#{}", user.name, user.discriminator));
-                    footer.icon_url(user.avatar_url().expect("fuck icons"));
-                    footer
+                e.author(|ea| {
+                    ea.icon_url(user.avatar_url().expect("fuck icons"));
+                    ea.name(format!("{}#{}", user.name, user.discriminator));
+                    ea.url("https://catgirl.moe/todo/profile/page");
+                    ea
                 });
+                e.colour(Colour::from_rgb(244, 67, 54));
+                e.description(    
+                    format!("<@{}> has left the server!\nWe will miss you!", user.id)
+                );
                 e
             });
             m
