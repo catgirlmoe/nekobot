@@ -16,8 +16,7 @@ use serenity::{
         macros::{command, group},
         StandardFramework,
         CommandResult,
-    },
-    builder::CreateEmbedAuthor
+    }
 };
 
 use std::env;
