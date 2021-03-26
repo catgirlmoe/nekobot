@@ -33,6 +33,15 @@ const COLOR_REACTS: [&str; 8] = [
     "🍓", "🍊", "🍌", "🥝", "🫐", "🍇", "🍒", "🌸"
 ];
 
+const OPT_ROLES: [RoleId; 4] = [
+    RoleId(818954872074272866), RoleId(824789571266281572),
+    RoleId(819194863299592212), RoleId(824789788061073418)
+];
+
+const OPT_REACTS: [&str; 4] = [
+    "👨‍💻", "⛩️", "🐱", "🎮"
+];
+
 // Event handler
 struct Handler;
 
@@ -67,7 +76,7 @@ impl EventHandler for Handler {
                 e.author(|ea| {
                     ea.icon_url(user.avatar_url().expect("fuck icons"));
                     ea.name(format!("{}#{}", user.name, user.discriminator));
-                    ea.url("https://catgirl.moe/todo/profile/page");
+                    ea.url(format!("https://catgirl.moe/member/{}", user.id));
                     ea
                 });
                 e.colour(Colour::from_rgb(244, 67, 54));
@@ -97,13 +106,27 @@ impl EventHandler for Handler {
             }
             r.delete(&ctx.http).await.expect("Failed to delete reaction");
         }
+        if r.message_id == 818504538305593385 {
+            let guild = r.guild_id.unwrap();
+            let user = r.user_id.unwrap();
+            let m: Member = ctx.cache.member(&guild, &user).await.unwrap();
+            let reacts: Vec<_> = OPT_REACTS.iter().enumerate().filter(|&(_, reacts)| r.emoji.unicode_eq(reacts)).map(|(i, _)| OPT_ROLES[i]).collect();
+            for rea in reacts {
+                ctx.cache.member(&guild, &user).await.expect("Failed to get ,e,ner to add role").add_role(&ctx.http, rea).await.expect("Failed to add role");
+            }
+            let mem_roles: Vec<_> = m.roles.iter().filter(|role| OPT_ROLES.contains(role)).collect();
+            for role in mem_roles {
+                ctx.cache.member(&guild, &user).await.expect("Failed to get member to remove role").remove_role(&ctx.http, role).await.expect("Failed to remove role");
+            }
+            r.delete(&ctx.http).await.expect("Failed to delete reaction");
+        }
     }
 }
 
 
 
 #[group]
-#[commands(color)]
+#[commands(color, optin)]
 struct General;
 
 #[tokio::main]
@@ -129,6 +152,32 @@ async fn main() {
 }
 
 use serenity::utils::Colour;
+
+#[command]
+async fn optin(ctx: &Context, msg: &Message) -> CommandResult {
+    if msg.author.id != 638230362711130132 {return Ok(())}
+    let sent = msg.channel_id.send_message(&ctx.http, |m| {
+        m.embed(|e| {
+            e.title("Pick a color role!");
+            e.colour(Colour::from_rgb(233, 30, 99));
+            e.description(
+                "<@&818954872074272866>
+                <@&824789571266281572>
+                <@&819194863299592212>
+                <@&824789788061073418>"
+            );
+    
+            e
+        });
+    
+        m
+    }).await.unwrap();
+    for reacts in &OPT_REACTS {
+        sent.react(&ctx.http, ReactionType::Unicode(reacts.to_string())).await.expect("Fucking bruuuuh");
+    }
+    Ok(())
+}
+
 #[command]
 async fn color(ctx: &Context, msg: &Message) -> CommandResult {
     if msg.author.id != 638230362711130132 {return Ok(())}
