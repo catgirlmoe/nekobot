@@ -106,7 +106,7 @@ impl EventHandler for Handler {
             }
             r.delete(&ctx.http).await.expect("Failed to delete reaction");
         }
-        if r.message_id == 818504538305593385 {
+        if r.message_id == 824811302605029397 {
             let guild = r.guild_id.unwrap();
             let user = r.user_id.unwrap();
             let m: Member = ctx.cache.member(&guild, &user).await.unwrap();
@@ -158,7 +158,7 @@ async fn optin(ctx: &Context, msg: &Message) -> CommandResult {
     if msg.author.id != 638230362711130132 {return Ok(())}
     let sent = msg.channel_id.send_message(&ctx.http, |m| {
         m.embed(|e| {
-            e.title("Pick a color role!");
+            e.title("Pick an opt-in role!");
             e.colour(Colour::from_rgb(233, 30, 99));
             e.description(
                 "<@&818954872074272866>
