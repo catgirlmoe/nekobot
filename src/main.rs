@@ -7,16 +7,12 @@ use serenity::{
         Client,
     },
     model::{
-        channel::{Message, Reaction, ReactionType},
+        channel::Reaction,
         prelude::{User, Member, RoleId, GuildId},
         gateway::Ready,
         id::ChannelId
     },
-    framework::standard::{
-        macros::{command, group},
-        StandardFramework,
-        CommandResult,
-    }
+    utils::Colour
 };
 
 use std::env;
@@ -67,7 +63,7 @@ impl EventHandler for Handler {
                 e
             });
             m
-        }).await.unwrap();
+        }).await.expect("Failed to fucking send welcome");
     }
 
     async fn guild_member_removal(&self, ctx: Context, _guild_id: GuildId, user: User, _member: Option<Member>) {
@@ -86,19 +82,19 @@ impl EventHandler for Handler {
                 e
             });
             m
-        }).await.unwrap();
+        }).await.expect("Failed to fucking send bye");
     }
 
 
     async fn reaction_add(&self, ctx: Context, r: Reaction) {
         if r.user_id.expect("What the fuck") == 810172289462435881 {return;}
         if r.message_id == 818504538305593385 {
-            let guild = r.guild_id.unwrap();
-            let user = r.user_id.unwrap();
-            let m: Member = ctx.cache.member(&guild, &user).await.unwrap();
+            let guild = r.guild_id.expect("Failed to get fucking guild");
+            let user = r.user_id.expect("Failed to get fucking user");
+            let m: Member = ctx.cache.member(&guild, &user).await.expect("Failed to get fucking member");
             let reacts: Vec<_> = COLOR_REACTS.iter().enumerate().filter(|&(_, reacts)| r.emoji.unicode_eq(reacts)).map(|(i, _)| COLOR_ROLES[i]).collect();
             for rea in reacts {
-                ctx.cache.member(&guild, &user).await.expect("Failed to get ,e,ner to add role").add_role(&ctx.http, rea).await.expect("Failed to add role");
+                ctx.cache.member(&guild, &user).await.expect("Failed to get member to add role").add_role(&ctx.http, rea).await.expect("Failed to add role");
             }
             let mem_roles: Vec<_> = m.roles.iter().filter(|role| COLOR_ROLES.contains(role)).collect();
             for role in mem_roles {
@@ -107,12 +103,12 @@ impl EventHandler for Handler {
             r.delete(&ctx.http).await.expect("Failed to delete reaction");
         }
         if r.message_id == 824811302605029397 {
-            let guild = r.guild_id.unwrap();
-            let user = r.user_id.unwrap();
-            let m: Member = ctx.cache.member(&guild, &user).await.unwrap();
+            let guild = r.guild_id.expect("Failed to get fucking guild");
+            let user = r.user_id.expect("Failed to get fucking user");
+            let m: Member = ctx.cache.member(&guild, &user).await.expect("Failed to get fucking member");
             let reacts: Vec<_> = OPT_REACTS.iter().enumerate().filter(|&(_, reacts)| r.emoji.unicode_eq(reacts)).map(|(i, _)| OPT_ROLES[i]).collect();
             for rea in reacts {
-                ctx.cache.member(&guild, &user).await.expect("Failed to get ,e,ner to add role").add_role(&ctx.http, rea).await.expect("Failed to add role");
+                ctx.cache.member(&guild, &user).await.expect("Failed to get member to add role").add_role(&ctx.http, rea).await.expect("Failed to add role");
             }
         }
     }
@@ -120,12 +116,12 @@ impl EventHandler for Handler {
     async fn reaction_remove(&self, ctx: Context, r: Reaction) {
         if r.user_id.expect("What the fuck") == 810172289462435881 {return;}
         if r.message_id == 824811302605029397 {
-            let guild = r.guild_id.unwrap();
-            let user = r.user_id.unwrap();
-            let m: Member = ctx.cache.member(&guild, &user).await.unwrap();
+            let guild = r.guild_id.expect("Failed to get fucking guild");
+            let user = r.user_id.expect("Failed to get fucking user");
+            let m: Member = ctx.cache.member(&guild, &user).await.expect("Failed to get fucking member");
             let reacts: Vec<_> = OPT_REACTS.iter().enumerate().filter(|&(_, reacts)| r.emoji.unicode_eq(reacts)).map(|(i, _)| OPT_ROLES[i]).collect();
             for rea in reacts {
-                ctx.cache.member(&guild, &user).await.expect("Failed to get ,e,ner to add role").remove_role(&ctx.http, rea).await.expect("Failed to add role");
+                ctx.cache.member(&guild, &user).await.expect("Failed to get member to add role").remove_role(&ctx.http, rea).await.expect("Failed to add role");
             }
         }
     }
@@ -133,23 +129,12 @@ impl EventHandler for Handler {
 
 }
 
-
-
-#[group]
-#[commands(color, optin)]
-struct General;
-
 #[tokio::main]
 async fn main() {
-    let framework = StandardFramework::new()
-        .configure(|c| c.prefix("~")) // set the bot's prefix to "~"
-        .group(&GENERAL_GROUP);
-
     // Login with a bot token from the environment
     let token = env::var("DISCORD_TOKEN").expect("token");
     let mut client = Client::builder(token)
         .event_handler(Handler)
-        .framework(framework)
         .intents(GatewayIntents::all())
         .await
         .expect("Error creating client");
@@ -159,60 +144,4 @@ async fn main() {
     if let Err(why) = client.start().await {
         println!("An error occurred while running the client: {:?}", why);
     }
-}
-
-use serenity::utils::Colour;
-
-#[command]
-async fn optin(ctx: &Context, msg: &Message) -> CommandResult {
-    if msg.author.id != 638230362711130132 {return Ok(())}
-    let sent = msg.channel_id.send_message(&ctx.http, |m| {
-        m.embed(|e| {
-            e.title("Pick an opt-in role!");
-            e.colour(Colour::from_rgb(233, 30, 99));
-            e.description(
-                "<@&818954872074272866>
-                <@&824789571266281572>
-                <@&819194863299592212>
-                <@&824789788061073418>"
-            );
-    
-            e
-        });
-    
-        m
-    }).await.unwrap();
-    for reacts in &OPT_REACTS {
-        sent.react(&ctx.http, ReactionType::Unicode(reacts.to_string())).await.expect("Fucking bruuuuh");
-    }
-    Ok(())
-}
-
-#[command]
-async fn color(ctx: &Context, msg: &Message) -> CommandResult {
-    if msg.author.id != 638230362711130132 {return Ok(())}
-    let sent = msg.channel_id.send_message(&ctx.http, |m| {
-        m.embed(|e| {
-            e.title("Pick a color role!");
-            e.colour(Colour::from_rgb(233, 30, 99));
-            e.description(
-                "<@&816297710662582322>
-                <@&816298008412028968>
-                <@&816298168945475595>
-                <@&816298943926763551>
-                <@&816298721376731177>
-                <@&812122334248435742>
-                <@&812123073406042113>
-                <@&816419487385518101>"
-            );
-    
-            e
-        });
-    
-        m
-    }).await.unwrap();
-    for reacts in &COLOR_REACTS {
-        sent.react(&ctx.http, ReactionType::Unicode(reacts.to_string())).await.expect("Fucking bruuuuh");
-    }
-    Ok(())
 }
