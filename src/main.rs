@@ -5,23 +5,25 @@ use serenity::framework::standard::StandardFramework;
 use std::env;
 
 mod commands;
-mod consts;
 mod events;
+
+use events::Handler;
+use env::var;
 
 #[tokio::main]
 async fn main() {
-    let framework = StandardFramework::new()
+    let fw = StandardFramework::new()
         .configure(|c| c.prefix("~")) // set the bot's prefix to "~"
         .group(&commands::GENERAL_GROUP);
 
     // Login with a bot token from the environment
-    let token = env::var("DISCORD_TOKEN").expect("token");
+    let token = var("DISCORD_TOKEN").expect("No token was found aeee");
     let mut client = Client::builder(token)
-        .event_handler(events::Handler)
-        .framework(framework)
+        .event_handler(Handler)
+        .framework(fw)
         .intents(GatewayIntents::all())
         .await
-        .expect("Error creating client");
+        .expect("An error");
 
     // start listening for events by starting a single shard
     if let Err(why) = client.start().await {
