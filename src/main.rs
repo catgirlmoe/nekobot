@@ -105,7 +105,6 @@ impl EventHandler for Handler {
         if r.message_id == 824811302605029397 {
             let guild = r.guild_id.expect("Failed to get fucking guild");
             let user = r.user_id.expect("Failed to get fucking user");
-            let m: Member = ctx.cache.member(&guild, &user).await.expect("Failed to get fucking member");
             let reacts: Vec<_> = OPT_REACTS.iter().enumerate().filter(|&(_, reacts)| r.emoji.unicode_eq(reacts)).map(|(i, _)| OPT_ROLES[i]).collect();
             for rea in reacts {
                 ctx.cache.member(&guild, &user).await.expect("Failed to get member to add role").add_role(&ctx.http, rea).await.expect("Failed to add role");
@@ -118,7 +117,6 @@ impl EventHandler for Handler {
         if r.message_id == 824811302605029397 {
             let guild = r.guild_id.expect("Failed to get fucking guild");
             let user = r.user_id.expect("Failed to get fucking user");
-            let m: Member = ctx.cache.member(&guild, &user).await.expect("Failed to get fucking member");
             let reacts: Vec<_> = OPT_REACTS.iter().enumerate().filter(|&(_, reacts)| r.emoji.unicode_eq(reacts)).map(|(i, _)| OPT_ROLES[i]).collect();
             for rea in reacts {
                 ctx.cache.member(&guild, &user).await.expect("Failed to get member to add role").remove_role(&ctx.http, rea).await.expect("Failed to add role");
