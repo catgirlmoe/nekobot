@@ -53,7 +53,7 @@ impl EventHandler for Handler {
                 e.author(|ea| {
                     ea.icon_url(member.user.avatar_url().expect("fuck icons"));
                     ea.name(format!("{}#{}", member.user.name, member.user.discriminator));
-                    ea.url(format!("https://catgirl.moe/m/{}", user.id));
+                    ea.url(format!("https://catgirl.moe/m/{}", member.user.id));
                     ea
                 });
                 e.colour(Colour::from_rgb(139, 195, 74));
