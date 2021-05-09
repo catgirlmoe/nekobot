@@ -7,8 +7,6 @@
 pub const GENERAL: u64 = 808467694100938772;
 pub const BOTID: u64 = 810172289462435881;
 
-
-
 pub const COLOR_MSG: &u64 = &841023142532087818;
 pub const COLOR_ROLES: &'static [u64] = &[
   840972852780859412, // red
