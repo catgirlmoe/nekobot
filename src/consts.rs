@@ -4,7 +4,7 @@
 //  Licensed with GNU Affero General Public License v3.0 or later
 */
 
-pub const GENERAL: u64 = 840934179243425803;
+pub const GENERAL: u64 = 808467694100938772;
 pub const BOTID: u64 = 810172289462435881;
 
 
