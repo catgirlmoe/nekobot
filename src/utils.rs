@@ -4,7 +4,7 @@
 //  Licensed with GNU Affero General Public License v3.0 or later
 */
 
-use serenity::{client::Context, model::channel::Reaction};
+use serenity::{client::Context, model::{channel::{Reaction, ReactionType}, id::ChannelId}};
 
 
 pub async fn give_role(ROLES: &[u64], REACTS: &[&str], ctx: Context, r: Reaction) {
@@ -28,5 +28,17 @@ pub async fn take_role(ROLES: &[u64], REACTS: &[&str], ctx: Context, r: Reaction
     .expect("Failed to get member to remove role")
     .remove_role(&ctx.http, urt).await
     .expect("Failed to remove role");
+  }
+}
+
+pub async fn role_message(ROLES: &[u64], REACTS: &[&str], ctx: Context, r: Reaction) {
+  let crm = ChannelId(814810596038017034).send_message(&ctx.http, |m| {
+    m.embed( |e| {
+      e.title("Pick a country role:");
+      e.description(ROLES.into_iter().map(|r| format!("<@&{}>", r)).collect::<Vec<String>>().join("\n"))
+    })
+  }).await.expect("Failed to send welcome");
+  for r in REACTS {
+    crm.react(&ctx.http, ReactionType::Unicode(r.to_owned().to_owned())).await.expect("Failed");
   }
 }

@@ -9,7 +9,7 @@ pub const BOTID: u64 = 810172289462435881;
 
 
 
-pub const COLOR_MSG: &u64 = &259981416928903168;
+pub const COLOR_MSG: &u64 = &841023142532087818;
 pub const COLOR_ROLES: &'static [u64] = &[
   840972852780859412, // red
   840972855117348884, // orange
@@ -24,7 +24,7 @@ pub const COLOR_REACTS: &'static [&str] = &[
     "🍓", "🍊", "🍌", "🥝", "🫐", "🍇", "🍒", "🌸"
 ];
 
-pub const OPT_MSG: &u64 = &841004205895581746;
+pub const OPT_MSG: &u64 = &841023329262895124;
 pub const OPT_ROLES: &'static [u64] = &[
   840972862713626664, // nerd
   840972863225856032, // weeb
@@ -37,7 +37,7 @@ pub const OPT_REACTS: &'static [&str] = &[
     "🧑‍💻", "⛩️", "🐱", "🎮", "🎀", "🧄"
 ];
 
-pub const ACCESS_MSG: &u64 = &841009167551954974;
+pub const ACCESS_MSG: &u64 = &841023505230856242;
 pub const ACCESS_ROLES: &'static [u64] = &[
   840965887967232011, // nekobin
   840995197487677440, // nekosu
@@ -47,7 +47,7 @@ pub const ACCESS_REACTS: &'static [&str] = &[
     "💾", "🔘", "😳"
 ];
 
-pub const CC_MSG: &u64 = &841009167551954975;
+pub const CC_MSG: &u64 = &841023676987211787;
 pub const CC_ROLES: &'static [u64] = &[
   841013727369494578, // uk
   840972763207696424, // de

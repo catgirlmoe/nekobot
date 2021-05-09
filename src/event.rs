@@ -7,14 +7,14 @@
 use crate::consts::*;
 use crate::utils::*;
 
-use serenity::{async_trait, client::{Context, EventHandler}, model::{channel::Reaction, guild::Member, id::{ChannelId, GuildId}, prelude::{Ready, User}}, utils::Colour};
+use serenity::{async_trait, client::{Context, EventHandler}, model::{channel::{Reaction, ReactionType}, guild::Member, id::{ChannelId, GuildId}, prelude::{Ready, User}}, utils::Colour};
 
 
 pub struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
-  async fn ready(&self, _: Context, ready: Ready) {
+  async fn ready(&self, _ctx: Context, ready: Ready) {
     println!("Connected as {}#{}", ready.user.name, ready.user.discriminator);
   }
 
