@@ -1,32 +1,29 @@
+/*
+//  Copyright 2021 catgirl.moe contributors <https://catgirl.moe>
+//
+//  Licensed with GNU Affero General Public License v3.0 or later
+*/
+
 use serenity::client::bridge::gateway::GatewayIntents;
 use serenity::client::Client;
-use serenity::framework::standard::StandardFramework;
-
 use std::env;
-
-mod commands;
-mod events;
-
-use events::Handler;
 use env::var;
+
+pub mod consts;
+pub mod event;
+pub mod utils;
 
 #[tokio::main]
 async fn main() {
-    let fw = StandardFramework::new()
-        .configure(|c| c.prefix("~")) // set the bot's prefix to "~"
-        .group(&commands::GENERAL_GROUP);
+  let token = var("DISCORD_TOKEN").expect("No token was found");
+  let mut client = Client::builder(token)
+    .event_handler(event::Handler)
+    .intents(GatewayIntents::all())
+    .await
+    .expect("An error occured during startup");
 
-    // Login with a bot token from the environment
-    let token = var("DISCORD_TOKEN").expect("No token was found aeee");
-    let mut client = Client::builder(token)
-        .event_handler(Handler)
-        .framework(fw)
-        .intents(GatewayIntents::all())
-        .await
-        .expect("An error");
-
-    // start listening for events by starting a single shard
-    if let Err(why) = client.start().await {
-        println!("An error occurred while running the client: {:?}", why);
-    }
+  // start listening for events by starting a single shard
+  if let Err(why) = client.start().await {
+    println!("An error occurred while running the client: {:?}", why);
+  }
 }
