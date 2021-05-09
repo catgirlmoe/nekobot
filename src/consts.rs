@@ -16,7 +16,7 @@ pub const COLOR_ROLES: &'static [u64] = &[
   840972858280247296, // blue
   840972859471953930, // purple
   840972860263628820, // pink
-  840972860952281088, // light pink
+  840972860952281088, // light pink W
 ];
 pub const COLOR_REACTS: &'static [&str] = &[
     "🍓", "🍊", "🍌", "🥝", "🫐", "🍇", "🍒", "🌸"
