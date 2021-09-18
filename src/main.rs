@@ -1,22 +1,20 @@
 /*
-//  Copyright 2021 catgirl.moe contributors <https://catgirl.moe>
+//  Copyright 2021 neko.rs contributors <https://neko.rs>
 //
 //  Licensed with GNU Affero General Public License v3.0 or later
 */
 
 use serenity::client::bridge::gateway::GatewayIntents;
 use serenity::client::Client;
-use std::env;
-use env::var;
 
-pub mod consts;
-pub mod event;
-pub mod utils;
+// pub mod config;
+// pub mod consts;
+// pub mod event;
+// pub mod utils;
 
 #[tokio::main]
 async fn main() {
-  let token = var("DISCORD_TOKEN").expect("No token was found");
-  let mut client = Client::builder(token)
+  let mut client = Client::builder((*config::PORT).to_owned())
     .event_handler(event::Handler)
     .intents(GatewayIntents::all())
     .await

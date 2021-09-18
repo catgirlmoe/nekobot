@@ -1,0 +1,8 @@
+tab_spaces = 2
+max_width = 100
+merge_derives = true
+reorder_imports = true
+reorder_modules = true 
+newline_style = "Unix"
+fn_args_layout = "Compressed"
+use_field_init_shorthand = true

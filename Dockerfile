@@ -1,34 +1,51 @@
 ##
-##  Copyright 2021 catgirl.moe contributors <https://catgirl.moe>
+##  Copyright 2021 neko.rs contributors <https://neko.rs>
 ##
 ##  Licensed with GNU Affero General Public License v3.0 or later
 ##
 
-FROM rust:slim
+# Define global arguments
+ARG PROJECT="nekobot"
+ARG UID="1000"
+ARG GID="1000"
 
-# Create new project
-RUN USER=root cargo new --bin nekobot
+####################
 
-# Create user for nekobot and chown directory
-RUN addgroup --system --gid 1000 nekobot && adduser --system --uid 1000 --gid 1000 nekobot
-RUN chown -R nekobot:nekobot /nekobot
+FROM rust:slim-bullseye as build
 
-# Switch to the project directory and user
-WORKDIR /nekobot
-USER nekobot
+# Create an empty rust project
+ARG PROJECT
+RUN USER=root cargo new --bin ${PROJECT}
+WORKDIR /${PROJECT}
 
-# Expose port and set entrypoint
-EXPOSE 8080
-CMD ["./target/release/nekobot"]
-
-# Precompile dependencies
-COPY --chown=nekobot:nekobot Cargo.toml Cargo.toml
+# Precompile project dependencies
+COPY Cargo.toml Cargo.toml
 RUN cargo build --release
 
 # Remove precompile garbage
-RUN rm src/*.rs
-RUN rm target/release/deps/nekobot*
+RUN rm src/* target/release/deps/${PROJECT}*
 
-# Add the source code and build the final project
-COPY --chown=nekobot:nekobot src src
+# Build the actual project
+COPY src src
 RUN cargo build --release
+
+####################
+
+FROM debian:bullseye-slim
+
+# Set the main executable path
+CMD ["./run"]
+
+# Create the main user and group
+ARG UID
+ARG GID
+ARG PROJECT
+RUN addgroup --system --gid ${GID} ${PROJECT} && adduser --system --uid ${UID} --gid ${GID} ${PROJECT}
+
+# Create the project directory and switch to the main user
+RUN mkdir ${PROJECT} && chown ${PROJECT}:${PROJECT} /${PROJECT}
+WORKDIR /${PROJECT}
+USER ${PROJECT}
+
+# Copy the built binary from the previous stage
+COPY --from=build --chown=${PROJECT}:${PROJECT} /${PROJECT}/target/release/${PROJECT} ./run

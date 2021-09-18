@@ -1,5 +1,5 @@
 /*
-//  Copyright 2021 catgirl.moe contributors <https://catgirl.moe>
+//  Copyright 2021 neko.rs contributors <https://neko.rs>
 //
 //  Licensed with GNU Affero General Public License v3.0 or later
 */
@@ -18,9 +18,7 @@ pub const COLOR_ROLES: &'static [u64] = &[
   840972860263628820, // pink
   840972860952281088, // light pink W
 ];
-pub const COLOR_REACTS: &'static [&str] = &[
-    "🍓", "🍊", "🍌", "🥝", "🫐", "🍇", "🍒", "🌸"
-];
+pub const COLOR_REACTS: &'static [&str] = &["🍓", "🍊", "🍌", "🥝", "🫐", "🍇", "🍒", "🌸"];
 
 pub const OPT_MSG: &u64 = &841023329262895124;
 pub const OPT_ROLES: &'static [u64] = &[
@@ -31,9 +29,7 @@ pub const OPT_ROLES: &'static [u64] = &[
   840990259898613780, // femboy
   841001524054196245, // garlic bread
 ];
-pub const OPT_REACTS: &'static [&str] = &[
-    "🧑‍💻", "⛩️", "🐱", "🎮", "🎀", "🧄"
-];
+pub const OPT_REACTS: &'static [&str] = &["🧑‍💻", "⛩️", "🐱", "🎮", "🎀", "🧄"];
 
 pub const ACCESS_MSG: &u64 = &841023505230856242;
 pub const ACCESS_ROLES: &'static [u64] = &[
@@ -41,9 +37,7 @@ pub const ACCESS_ROLES: &'static [u64] = &[
   840995197487677440, // nekosu
   840990261420228638, // nsfw
 ];
-pub const ACCESS_REACTS: &'static [&str] = &[
-    "💾", "🔘", "😳"
-];
+pub const ACCESS_REACTS: &'static [&str] = &["💾", "🔘", "😳"];
 
 pub const CC_MSG: &u64 = &841023676987211787;
 pub const CC_ROLES: &'static [u64] = &[
@@ -52,6 +46,4 @@ pub const CC_ROLES: &'static [u64] = &[
   841013165969768458, // ru
   841013730032091136, // us
 ];
-pub const CC_REACTS: &'static [&str] = &[
-    "🇬🇧", "🇩🇪", "🇷🇺", "🇺🇸"
-];
+pub const CC_REACTS: &'static [&str] = &["🇬🇧", "🇩🇪", "🇷🇺", "🇺🇸"];
