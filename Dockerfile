@@ -16,7 +16,7 @@ FROM rust:slim-bullseye as build
 # Update and install system build dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends libssl-dev && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends libssl-dev pkg-config && \
     DEBIAN_FRONTEND=noninteractive apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
