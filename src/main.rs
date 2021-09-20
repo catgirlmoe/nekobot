@@ -4,24 +4,25 @@
 //  Licensed with GNU Affero General Public License v3.0 or later
 */
 
+extern crate serde_json;
+
 use serenity::client::bridge::gateway::GatewayIntents;
 use serenity::client::Client;
+use serenity::prelude::SerenityError;
 
-// pub mod config;
-// pub mod consts;
-// pub mod event;
-// pub mod utils;
+pub mod config;
+//pub mod db;
+pub mod error;
+pub mod events;
 
 #[tokio::main]
-async fn main() {
-  let mut client = Client::builder((*config::PORT).to_owned())
-    .event_handler(event::Handler)
+async fn main() -> Result<(), SerenityError> {
+  Client::builder((*config::DISCORD_TOKEN).to_owned())
+    .event_handler(events::Handler)
+    .application_id((*config::APPLICATION_ID).parse()?)
     .intents(GatewayIntents::all())
-    .await
-    .expect("An error occured during startup");
-
-  // start listening for events by starting a single shard
-  if let Err(why) = client.start().await {
-    println!("An error occurred while running the client: {:?}", why);
-  }
+    .await?
+    .start()
+    .await?;
+  Ok(())
 }
