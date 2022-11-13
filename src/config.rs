@@ -56,7 +56,7 @@ impl Into<CreateSelectMenu> for RoleMenu {
 #[derive(Deserialize, Clone)]
 pub struct RoleButton {
   pub id: RoleId,
-  pub emoji: String,
+  pub emoji: ReactionType,
   pub text: String,
   pub desc: Option<String>,
 }
@@ -65,7 +65,7 @@ impl Into<CreateSelectMenuOption> for RoleButton {
   fn into(self) -> CreateSelectMenuOption {
     let mut opt = CreateSelectMenuOption::default();
     opt.value(self.id);
-    opt.emoji(ReactionType::Unicode(self.emoji));
+    opt.emoji(self.emoji);
     opt.label(self.text);
     if let Some(desc) = self.desc {
       opt.description(desc);
